@@ -3,7 +3,7 @@ locals {
 
   tags = {
     Name        = local.name
-    Owner       = "workload"
-    Environment = "dev"
+    Owner       = "Cloudops"
+    Environment = "demo"
   }
 }
