@@ -1,29 +1,25 @@
 
 
 module "vpc" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.12.0"
-
-  name                = local.name
-  public_subnet_names = ["public01", "public02", "public03"]
-
-  private_subnet_names = ["Private01", "Private02", "Private03"]
-  cidr                 = var.account_cidr
-
+  source          = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.12.0"
+  name            = local.name
+  cidr            = var.account_cidr
   azs             = var.azs
   private_subnets = var.private_subnet_cidr
   public_subnets  = var.public_subnet_cidr
 
   enable_nat_gateway = true
   single_nat_gateway = true
-
-  tags = local.tags
+  tags               = local.tags
 
   public_subnet_tags = {
+    "Name"                   = "${local.name}-public-subnet"
     "kubernetes.io/role/elb" = 1
 
   }
 
   private_subnet_tags = {
+    "Name"                            = "${local.name}-private-subnet"
     "kubernetes.io/role/internal-elb" = 1
     "karpenter.sh/discovery"          = local.name
   }

@@ -1,5 +1,5 @@
 variable "account_name" {
-  default     = "OnlineBoutique"
+  default     = "OnBoutique"
   description = "account name"
 }
 
