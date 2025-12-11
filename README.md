@@ -6,19 +6,31 @@ This repository contains Terraform configuration to provision a comprehensive AW
 
 - **EKS Cluster**: Deploys an EKS cluster (default version 1.34) with API authentication mode.
 - **VPC Networking**: Sets up a VPC with configurable CIDR, public, and private subnets across multiple Availability Zones.
-- **Managed Node Groups**: Supports provisioning of EKS Managed Node Groups with:
-    - On-Demand or Spot capacity types.
-    - Custom Launch Templates.
-    - Configurable disk size, instance types, and AMI types (AL2023).
-- **EKS Auto Mode**: specialized configuration for EKS Auto Mode workloads.
-- **EKS Addons**: Automatically installs and configures key addons:
+- **Flexible Workload Modes**:
+    - **Managed Nodes**: Provision EKS Managed Node Groups with EC2 instances. Supports On-Demand/Spot, custom Launch Templates, and configurable storage.
+    - **EKS Auto Mode**: Serverless-like managed compute where AWS handles node lifecycle.
+    - **Hybrid Mode**: Run both Managed Nodes and Auto Mode in the same cluster.
+- **EKS Addons** (**Required only for Managed Nodes**): Automatically installs and configures key addons:
     - VPC CNI
     - CoreDNS
     - Kube Proxy
     - Metrics Server
     - EKS Pod Identity Agent
     - Amazon CloudWatch Observability
-- **Security & IAM**: granular IAM roles and policies for the Cluster, Nodes, and specific user access.
+- **Security & IAM**: Granular IAM roles and policies for the Cluster, Nodes, and specific user access.
+
+## Resource Dependencies (Managed Nodes)
+
+For configurations using Managed Nodes, resources are created in this specific dependency order:
+
+1. **Networking Layer**: VPC, Subnets, Internet Gateway, and **NAT Gateways**.
+2. **Security Layer**: Security Groups and IAM Roles/Policies.
+3. **Cluster Foundation**: EKS Control Plane.
+4. **Initial Add-ons**: `EKS Pod Identity` and `VPC CNI` (Required for nodes to join).
+5. **Compute Layer**:
+   - **Launch Template**: Defines instance specs.
+   - **Managed Node Group**: Provisions the EC2 instances (Depends on VPC CNI).
+6. **Post-Compute Add-ons**: `CoreDNS`, `Kube Proxy`, `Metrics Server` (Require active nodes).
 
 ## Prerequisites
 
