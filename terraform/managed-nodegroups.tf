@@ -50,7 +50,7 @@ resource "aws_eks_node_group" "managed" {
 
 
   tags = {
-    Name     = "${local.name}-managed"
+    Name     = "online-vm-managed"
     type     = "Managed"
     instance = var.managed_nodegroup_instance_type
   }

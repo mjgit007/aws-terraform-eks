@@ -1,4 +1,4 @@
-managed_nodegroup_ami_id = "ami-01b056d29afab4ae1" # Example: latest AL2023 EKS AMI ID for your region
+# managed_nodegroup_ami_id = "ami-01b056d29afab4ae1" # Example: latest AL2023 EKS AMI ID for your region
 account_name = "OnlineBoutique"
 environment  = "demo"
 account_cidr = "10.0.0.0/16"
@@ -10,7 +10,7 @@ region  = "eu-west-1"
 define_workload = {
   default = {
     automode      = true
-    managed_nodes = true
+    managed_nodes = false
     fargate_nodes = false
   }
 }

@@ -17,44 +17,28 @@ resource "aws_eks_cluster" "OnlineBoutique" {
 
   bootstrap_self_managed_addons = false
 
-  dynamic "compute_config" {
-    for_each = var.define_workload["default"].automode ? [1] : []
-    content {
-      enabled       = var.define_workload["default"].automode
-      node_pools    = var.define_workload["default"].automode ? ["general-purpose"] : []
-      node_role_arn = aws_iam_role.node[0].arn
+  compute_config {
+    enabled       = var.define_workload["default"].automode
+    node_pools    = var.define_workload["default"].automode ? ["general-purpose"] : []
+    node_role_arn = var.define_workload["default"].automode ? aws_iam_role.node[0].arn : ""
+  }
+
+  kubernetes_network_config {
+    elastic_load_balancing {
+      enabled = var.define_workload["default"].automode
     }
   }
 
-
-  # compute_config {
-  #   enabled       = var.define_workload["default"].automode
-  #   node_pools    = var.define_workload["default"].automode ? ["general-purpose"] : []
-  #   node_role_arn = aws_iam_role.node.arn
-  # }
-
-  dynamic "kubernetes_network_config" {
-    for_each = var.define_workload["default"].automode ? [1] : []
-    content {
-      elastic_load_balancing {
-        enabled = var.define_workload["default"].automode
-      }
-    }
-  }
-
-  dynamic "storage_config" {
-    for_each = var.define_workload["default"].automode ? [1] : []
-    content {
-      block_storage {
-        enabled = var.define_workload["default"].automode
-      }
+  storage_config {
+    block_storage {
+      enabled = var.define_workload["default"].automode
     }
   }
 
   vpc_config {
     endpoint_private_access = true
     endpoint_public_access  = true
-    public_access_cidrs     = concat(["51.241.128.76/32"], [for ip in module.vpc.nat_public_ips : "${ip}/32"])
+    public_access_cidrs     = concat(["51.241.128.76/32", "176.253.170.95/32"], [for ip in module.vpc.nat_public_ips : "${ip}/32"])
     subnet_ids              = module.vpc.private_subnets
     # security_group_ids      = [aws_security_group.eks_cluster.id]
   }

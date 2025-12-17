@@ -1,7 +1,7 @@
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="==BOUNDARY=="
+Content-Type: multipart/mixed; boundary="//"
 
---==BOUNDARY==
+--//
 Content-Type: application/node.eks.aws
 
 ---
@@ -20,19 +20,12 @@ spec:
       - ${cluster_dns_ip}
     flags:
 %{ if node_labels != "" ~}
-    - "--node-labels=${node_labels}"
+    - "--node-labels=${node_labels},eks.amazonaws.com/nodegroup-image=${ami_id},eks.amazonaws.com/capacityType=${capacity_type},eks.amazonaws.com/nodegroup=${ng_name},nodetype=managed"
+%{ else ~}
+    - "--node-labels=eks.amazonaws.com/nodegroup-image=${ami_id},eks.amazonaws.com/capacityType=${capacity_type},eks.amazonaws.com/nodegroup=${ng_name},nodetype=managed"
 %{ endif ~}
 %{ if kubelet_extra_args != "" ~}
     - "${kubelet_extra_args}"
 %{ endif ~}
 
---==BOUNDARY==
-Content-Type: text/x-shellscript; charset="us-ascii"
-
-#!/bin/bash
-set -ex
-# Optional: Custom post-bootstrap commands can be added here
-# Example: Install additional packages, configure system settings, etc.
-# dnf install -y custom-package
-
---==BOUNDARY==--
+--//--
