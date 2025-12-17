@@ -1,6 +1,6 @@
 # aws-terraform-eks
 
-This repository contains Terraform configuration to provision a comprehensive AWS Elastic Kubernetes Service (EKS) environment. It includes the setup of the EKS cluster, VPC networking, Managed Node Groups, and essential EKS addons.
+This repository contains Terraform configuration to provision a comprehensive AWS Elastic Kubernetes Service (EKS) environment. It includes the setup of the EKS cluster, VPC networking, Managed Node Groups, and essential EKS addons. This repository contains basic configuration for eks cluster to work with Auto mode and Managed node groups with and without custom launch template.
 
 ## Features
 
@@ -47,6 +47,7 @@ For configurations using Managed Nodes, resources are created in this specific d
 2. **Select a Configuration:**
    We provide three example configurations in the `examples/` directory:
    - **Managed Node Groups**: [examples/managed-node.tfvars](examples/managed-node.tfvars)
+   - **Managed Node (Custom LT)**: [examples/managed-node-custom-template.tfvars](examples/managed-node-custom-template.tfvars)
    - **EKS Auto Mode**: [examples/auto-mode.tfvars](examples/auto-mode.tfvars)
    - **Hybrid Mode**: [examples/hybrid-mode.tfvars](examples/hybrid-mode.tfvars)
 
@@ -93,6 +94,10 @@ For configurations using Managed Nodes, resources are created in this specific d
 
 This module currently does not defined any output variables.
 
-## Karpenter
 
-The repository contains configuration for **Karpenter** in `terraform/karpenter.tf`, but it is currently commented out and disabled by default.
+## Test Cases
+
+1. Managed Node Group with default configuration
+2. Managed Node Group with custom launch template
+3. Mnaaged Node group and EKS Auto Mode(Hybrid mode with Managed node group first in the order)
+
